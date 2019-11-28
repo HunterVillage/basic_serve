@@ -12,7 +12,9 @@ public class ResponseBody implements Serializable {
     private Object data;
     private String title;
     private String message;
+    private boolean resend;
     private String token;
+    private boolean reLogin;
 
     public static ResponseBody success() {
         return new ResponseBody(true, CategoryTypes.SUCCESS);
@@ -45,8 +47,18 @@ public class ResponseBody implements Serializable {
         return this;
     }
 
+    public ResponseBody resend() {
+        this.resend = true;
+        return this;
+    }
+
     public ResponseBody token(String token) {
         this.token = token;
+        return this;
+    }
+
+    public ResponseBody reLogin() {
+        this.reLogin = true;
         return this;
     }
 
@@ -77,5 +89,13 @@ public class ResponseBody implements Serializable {
 
     public String getToken() {
         return token;
+    }
+
+    public boolean isResend() {
+        return resend;
+    }
+
+    public boolean getReLogin() {
+        return reLogin;
     }
 }

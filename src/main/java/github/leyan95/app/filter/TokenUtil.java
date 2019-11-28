@@ -4,6 +4,9 @@ import github.leyan95.app.controller.AppUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jdk.nashorn.internal.parser.Token;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -17,6 +20,9 @@ import java.util.ResourceBundle;
  */
 @Component
 public class TokenUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TokenUtil.class);
+
     static final String CLAIM_KEY_AVATAR = "avatar";
     static final String CLAIM_KEY_CREATED = "created";
     static final String CLAIM_KEY_AUTH = "auth";
@@ -59,10 +65,9 @@ public class TokenUtil {
         return claims;
     }
 
-    public String refreshToken(String token) {
+    public String refreshToken(Claims claims) {
         String refreshedToken;
         try {
-            final Claims claims = getClaimsFromToken(token);
             claims.put(CLAIM_KEY_CREATED, new Date());
             refreshedToken = this.generateToken(claims);
         } catch (Exception e) {
@@ -71,7 +76,9 @@ public class TokenUtil {
         return refreshedToken;
     }
 
-    public boolean shouldRefreshed(Claims claims) {
-        return claims.getExpiration().before(new Date());
+    public boolean shouldRefresh(Claims claims) {
+        long createTime = (long) claims.get(CLAIM_KEY_CREATED);
+        // token 超时前这30分钟的范围内如果有活动就刷新token，如果这一小时没有任何操作则必须重新登录
+        return new Date(createTime + tokenExpiration - 30 * 10000).before(new Date());
     }
 }
