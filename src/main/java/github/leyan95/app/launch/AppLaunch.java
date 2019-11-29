@@ -4,7 +4,7 @@ import github.leyan95.app.annotation.Bundle;
 import github.leyan95.app.annotation.Router;
 import github.leyan95.app.auth.AbstractAuthInstaller;
 import github.leyan95.app.auth.AuthFactory;
-import github.leyan95.app.controller.AppController;
+import github.leyan95.app.controller.AppBundle;
 import github.leyan95.app.controller.RouterBoss;
 import github.leyan95.app.websocket.WebSocketServer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class AppLaunch implements CommandLineRunner {
     @Autowired
     private List<AbstractAuthInstaller> installers;
     @Autowired
-    private List<AppController> appControllers;
+    private List<AppBundle> appControllers;
 
     private RouterBoss routerBoss = RouterBoss.getInstance();
     private AuthFactory authFactory = AuthFactory.getInstance();

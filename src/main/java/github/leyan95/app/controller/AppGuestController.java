@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -24,6 +26,9 @@ public class AppGuestController {
         AppUser appUser = AppUser.newInstance()
                 .setAvatar(encodeAppUserInfo.get("userName"))
                 .setName("管理员")
+                .setAuthIds(new ArrayList<String>() {{
+                    add("order_read");
+                }})
                 .setDepartmentName("质保科");
         String token = tokenUtil.generateToken(appUser);
         return ResponseBody.success()

@@ -39,7 +39,7 @@ public class RouterBoss {
         }
     }
 
-    public RouterInfo getRouterInfo(String routerPath) {
-        return ROUTER_COMPANY.get(routerPath);
+    public RouterInfo getRouterInfo(String servletPath) {
+        return ROUTER_COMPANY.get(servletPath);
     }
 }

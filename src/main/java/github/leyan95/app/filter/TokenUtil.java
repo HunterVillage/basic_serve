@@ -40,7 +40,7 @@ public class TokenUtil {
         Map<String, Object> claims = new HashMap<>(4);
         claims.put(CLAIM_KEY_AVATAR, user.getAvatar());
         claims.put(CLAIM_KEY_CREATED, new Date());
-        claims.put(CLAIM_KEY_AUTH, user.getAuthIds());
+        claims.put(CLAIM_KEY_AUTH, String.join(",", user.getAuthIds()));
         return this.generateToken(claims);
     }
 

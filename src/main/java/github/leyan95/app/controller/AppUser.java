@@ -1,5 +1,7 @@
 package github.leyan95.app.controller;
 
+import java.util.List;
+
 /**
  * @author wujianchuan
  */
@@ -8,7 +10,7 @@ public class AppUser {
     private String name;
     private String departmentUuid;
     private String departmentName;
-    private String[] authIds;
+    private List<String> authIds;
 
     public static AppUser newInstance() {
         return new AppUser();
@@ -50,11 +52,11 @@ public class AppUser {
         return this;
     }
 
-    public String[] getAuthIds() {
+    public List<String> getAuthIds() {
         return authIds;
     }
 
-    public AppUser setAuthIds(String[] authIds) {
+    public AppUser setAuthIds(List<String> authIds) {
         this.authIds = authIds;
         return this;
     }
