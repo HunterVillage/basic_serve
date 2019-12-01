@@ -78,7 +78,11 @@ public class TokenUtil {
 
     public boolean shouldRefresh(Claims claims) {
         long createTime = (long) claims.get(CLAIM_KEY_CREATED);
+        long plusTimeMillis = tokenExpiration - 30 * 10000;
+        if (plusTimeMillis <= 0) {
+            throw new InvalidTokenException("The timeout of token shall not be less than half an hour.");
+        }
         // token 超时前这30分钟的范围内如果有活动就刷新token，如果这一小时没有任何操作则必须重新登录
-        return new Date(createTime + tokenExpiration - 30 * 10000).before(new Date());
+        return new Date(createTime + plusTimeMillis).before(new Date());
     }
 }
