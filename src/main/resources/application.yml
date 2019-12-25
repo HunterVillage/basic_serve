@@ -1,0 +1,9 @@
+basic:
+  token:
+    head: Bearer
+    secret: Dog-Shit
+    expiration: 600000
+  wsport: 8091
+  single: true
+server:
+  port: 8090

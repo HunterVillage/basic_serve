@@ -21,20 +21,13 @@ compileTestJava {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'abc app',
+        attributes 'Implementation-Title': 'github leyan95 basic_server',
                 'Implementation-Version': version
     }
 
-    exclude "com/shinow/abc/Application.class"
-    exclude "public/**"
-    exclude "static/**"
-    exclude "application.*.properties"
-    exclude "**test.**.xml"
+    exclude "github/leyan95/demo/**"
+    exclude "application.properties"
     exclude "*.sql"
-
-    from(fileTree(dir: "src/main/resources/public")) {
-        into "META-INF/resources/webjars/"
-    }
 }
 
 repositories {
@@ -50,9 +43,10 @@ repositories {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web:1.3.3.RELEASE')
+    compile('org.springframework.boot:spring-boot-starter-web:2.1.4.RELEASE')
     compile('io.jsonwebtoken:jjwt:0.9.1')
     compile('io.netty:netty-all:4.1.42.Final')
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:2.1.1.RELEASE")
 }
 
 publishing {
@@ -60,17 +54,18 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
             pom.withXml {
-                asNode().remove(asNode().get("dependencies"))
+                def root = asNode()
+                root.remove(root.get("dependencies"))
+                def dependenciesNode = root.appendNode("dependencies")
+                def jwtDependencyNode = dependenciesNode.appendNode('dependency')
+                jwtDependencyNode.appendNode('groupId', 'io.jsonwebtoken')
+                jwtDependencyNode.appendNode('artifactId', 'jjwt')
+                jwtDependencyNode.appendNode('version', '0.9.1')
+                def nettyDependencyNode = dependenciesNode.appendNode('dependency')
+                nettyDependencyNode.appendNode('groupId', 'io.netty')
+                nettyDependencyNode.appendNode('artifactId', 'netty-all')
+                nettyDependencyNode.appendNode('version', '4.1.42.Final')
             }
-        }
-    }
-    repositories {
-        maven {
-            credentials {
-                username "${upload_username}"
-                password "${upload_password}"
-            }
-            url "${upload_url}"
         }
     }
 }

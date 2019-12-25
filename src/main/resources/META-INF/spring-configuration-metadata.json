@@ -1,0 +1,41 @@
+{
+  "groups": [
+    {
+      "name": "basic.token",
+      "type": "github.leyan95.basic.config.TokenConfig",
+      "sourceType": "Token Properties"
+    },
+    {
+      "name": "basic",
+      "type": "github.leyan95.basic.config.BasicConfig",
+      "sourceType": "Basic Properties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "basic.token.secret",
+      "type": "java.lang.String",
+      "description": "token secret."
+    },
+    {
+      "name": "basic.token.expiration",
+      "type": "java.lang.Long",
+      "description": "token expiration."
+    },
+    {
+      "name": "basic.token.head",
+      "type": "java.lang.String",
+      "description": "token head."
+    },
+    {
+      "name": "basic.wsport",
+      "type": "java.lang.Integer",
+      "description": "basic wsport."
+    },
+    {
+      "name": "basic.single",
+      "type": "java.lang.Boolean",
+      "description": "basic single."
+    }
+  ]
+}
