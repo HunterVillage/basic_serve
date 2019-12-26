@@ -89,8 +89,9 @@ public class WebServerHandler extends SimpleChannelInboundHandler<Object> {
         } else {
             handshake.handshake(ctx.channel(), req);
             String avatar = req.headers().get("avatar");
+            String serialNo = req.headers().get("serialNo");
             if (avatar != null) {
-                channelPool.register(avatar, ctx.channel());
+                channelPool.register(avatar, serialNo, ctx.channel());
             }
         }
     }

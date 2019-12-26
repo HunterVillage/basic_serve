@@ -26,11 +26,11 @@ public class ChannelCenter {
         return INSTANCE;
     }
 
-    public void setSingleOnline(boolean singleOnline){
+    public void setSingleOnline(boolean singleOnline) {
         this.singleOnline = singleOnline;
     }
 
-    void register(String avatar, Channel newChannel) {
+    void register(String avatar, String serialNo, Channel newChannel) {
         ChannelHolder channelHolder = CHANNEL_POOL.putIfAbsent(avatar, new ChannelHolder(avatar));
         if (channelHolder == null) {
             channelHolder = CHANNEL_POOL.get(avatar);
@@ -46,8 +46,7 @@ public class ChannelCenter {
                 }
             }
         }
-        channelHolder.putChannel(newChannel);
-        resendBlockMessage(channelHolder, newChannel);
+        resendBlockMessage(channelHolder.putChannel(newChannel).putSerialNo(serialNo), newChannel);
     }
 
     public void send(MessageBody messageBody) throws JsonProcessingException {
