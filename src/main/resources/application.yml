@@ -3,7 +3,7 @@ basic:
     head: Bearer
     secret: Dog-Shit
     expiration: 600000
-  wsport: 8091
+  wsport: 8980
   single: true
 server:
-  port: 8090
+  port: 8981

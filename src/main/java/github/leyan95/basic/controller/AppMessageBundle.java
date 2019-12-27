@@ -5,8 +5,8 @@ import github.leyan95.basic.annotation.Bundle;
 import github.leyan95.basic.annotation.Router;
 import github.leyan95.basic.model.AppMessage;
 import github.leyan95.basic.model.AppMessagePersistent;
-import github.leyan95.basic.websocket.ChannelCenter;
 import github.leyan95.basic.websocket.MessageBody;
+import github.leyan95.basic.websocket.DeviceControl;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -41,14 +41,14 @@ public class AppMessageBundle {
         AppMessagePersistent appMessagePersistent = new AppMessagePersistent();
         appMessagePersistent.save(appMessage);
         MessageBody messageBody = MessageBody.appMessage(appMessage);
-        ChannelCenter.getInstance().send(messageBody);
+        DeviceControl.getInstance().sendMessage(messageBody);
         return "sendTextMessage";
     }
 
     @Router(id = "/sys_message", name = "测试系统动作消息 —— 强制下线")
     String sendSysMessage(@RequestParam(value = "avatar") String avatar) throws JsonProcessingException {
         MessageBody messageBody = MessageBody.offLine().receiver(avatar, avatar);
-        ChannelCenter.getInstance().send(messageBody);
+        DeviceControl.getInstance().sendMessage(messageBody);
         return "sendSysMessage";
     }
 }

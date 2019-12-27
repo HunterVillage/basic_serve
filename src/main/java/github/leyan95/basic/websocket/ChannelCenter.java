@@ -22,11 +22,11 @@ public class ChannelCenter {
     private static final ChannelCenter INSTANCE = new ChannelCenter();
     private boolean singleOnline = false;
 
-    public static ChannelCenter getInstance() {
+    static ChannelCenter getInstance() {
         return INSTANCE;
     }
 
-    public void setSingleOnline(boolean singleOnline) {
+    void setSingleOnline(boolean singleOnline) {
         this.singleOnline = singleOnline;
     }
 
@@ -49,22 +49,6 @@ public class ChannelCenter {
         resendBlockMessage(channelHolder.putChannel(newChannel).putSerialNo(serialNo), newChannel);
     }
 
-    public void send(MessageBody messageBody) throws JsonProcessingException {
-        String avatar = messageBody.getReceiver();
-        String messageJson = OBJECT_MAPPER.writeValueAsString(messageBody);
-        List<Channel> channels = new ArrayList<>();
-        ChannelHolder channelHolder = CHANNEL_POOL.get(avatar);
-        if (channelHolder != null) {
-            channels = channelHolder.getActiveChannel();
-        } else {
-            CHANNEL_POOL.putIfAbsent(avatar, new ChannelHolder(avatar));
-        }
-        if (channels.size() <= 0) {
-            CHANNEL_POOL.get(avatar).set2Block(messageJson);
-        }
-        channels.parallelStream().forEach(channel -> channel.writeAndFlush(new TextWebSocketFrame(messageJson)));
-    }
-
     private void resendBlockMessage(ChannelHolder channelHolder, Channel newChannel) {
         List<String> blockMessages = channelHolder.getMessageBlock();
         if (blockMessages.size() > 0) {
@@ -73,7 +57,26 @@ public class ChannelCenter {
         }
     }
 
-    List<Channel> getAllActiveHolder() {
+    ChannelHolder getChannelHolder(String avatar) {
+        return CHANNEL_POOL.get(avatar);
+    }
+
+    List<ChannelHolder> getAllChannelHolder() {
+        return (List<ChannelHolder>) CHANNEL_POOL.values();
+    }
+
+    List<Channel> getAllActiveChannel(String avatar) {
+        List<Channel> channels = new ArrayList<>();
+        ChannelHolder channelHolder = getChannelHolder(avatar);
+        if (channelHolder != null) {
+            channels = channelHolder.getActiveChannel();
+        } else {
+            CHANNEL_POOL.putIfAbsent(avatar, new ChannelHolder(avatar));
+        }
+        return channels;
+    }
+
+    List<Channel> getAllActiveChannel() {
         List<ChannelHolder> channelHolders = new ArrayList<>(CHANNEL_POOL.values());
         return channelHolders.stream().map(ChannelHolder::getActiveChannel).flatMap(Collection::stream).collect(Collectors.toList());
     }
